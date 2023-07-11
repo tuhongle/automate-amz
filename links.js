@@ -17,14 +17,18 @@ function delay(ms) {
     });
 };
 
+export const wsChromeEndpointurl = 'ws://127.0.0.1:9222/devtools/browser/30bcf57f-1f5d-4bf8-82ad-3c0cb4cef299';
+
 export const getLinks = async () => {
-        const browser = await puppeteer.launch({headless: false});
+        const browser = await puppeteer.connect({
+            browserWSEndpoint: wsChromeEndpointurl,
+        });
         const page = await browser.newPage();
         await page.setViewport({ width: 1280, height: 800});
         await page.goto(URL);
         const locationButton = await page.waitForSelector(selectors.locationButton);
         await locationButton.click();
-        await delay(1000);
+        await delay(2000);
         await page.type(selectors.locationBox, '90001');
         await page.keyboard.press('Enter');
         await delay(1000);
@@ -36,25 +40,25 @@ export const getLinks = async () => {
 
         const nextButton1 = await page.waitForXPath(selectors.next);
         await nextButton1.click();
-        await delay(2000);
+        await delay(3000);
         await page.waitForXPath(selectors.productLinks);
         let productLinks2 = await page.$x(selectors.productLinks);
 
         const nextButton2 = await page.waitForXPath(selectors.next);
         await nextButton2.click();
-        await delay(2000);
+        await delay(3000);
         await page.waitForXPath(selectors.productLinks);
         let productLinks3 = await page.$x(selectors.productLinks);
 
         const nextButton3 = await page.waitForXPath(selectors.next);
         await nextButton3.click();
-        await delay(2000);
+        await delay(3000);
         await page.waitForXPath(selectors.productLinks);
         let productLinks4 = await page.$x(selectors.productLinks);
 
         const nextButton4 = await page.waitForXPath(selectors.next);
         await nextButton4.click();
-        await delay(2000);
+        await delay(3000);
         await page.waitForXPath(selectors.productLinks);
         let productLinks5 = await page.$x(selectors.productLinks);
 
@@ -65,6 +69,6 @@ export const getLinks = async () => {
             const linkTxt = await link.jsonValue();
             await productPages.push(linkTxt);
         };
-        await browser.close();
+        await page.close();
         return productPages;
 };

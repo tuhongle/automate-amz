@@ -1,3 +1,5 @@
+import { wsChromeEndpointurl } from './links.js';
+
 import puppeteer from 'puppeteer';
 
 const dataSelectors = {
@@ -10,8 +12,14 @@ function delay(ms) {
         setTimeout(resolve, ms);
     });
 };
+
+const wsEndpointurl = wsChromeEndpointurl;
+
 export const fetchData = async (url) => {
-        const browser = await puppeteer.launch({headless: true});
+        const browser = await puppeteer.connect({
+            browserWSEndpoint: wsEndpointurl,
+            headless: false,
+        });
         const page = await browser.newPage();
         await page.setViewport({ width: 1280, height: 800});
         await page.goto(url);
@@ -34,7 +42,7 @@ export const fetchData = async (url) => {
         const date = await el2.getProperty('innerText');
         const dateTxt = await date.jsonValue();
 
-        // await browser.close();
+        await page.close();
         return { asinTxt, BSRTxt, dateTxt };
 };
 
