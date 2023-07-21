@@ -17,14 +17,17 @@ function delay(ms) {
     });
 };
 
-export const wsChromeEndpointurl = 'ws://127.0.0.1:9222/devtools/browser/30bcf57f-1f5d-4bf8-82ad-3c0cb4cef299';
+// add "--remote-debugging-port=9222" to behind target link in Properties of Chrome browser
+//? http://127.0.0.1:9222/json/version - go to this address to get endpoint webSocketDebuggerUrl
+export const wsChromeEndpointurl = 'ws://127.0.0.1:9222/devtools/browser/b0b13e1a-0cfc-4e6e-b1e9-809d7a87b456';
 
+// get info of the first 5 pages of new products
 export const getLinks = async () => {
         const browser = await puppeteer.connect({
             browserWSEndpoint: wsChromeEndpointurl,
         });
         const page = await browser.newPage();
-        await page.setViewport({ width: 1280, height: 800});
+        await page.setViewport({ width: 1920, height: 1080});
         await page.goto(URL);
         const locationButton = await page.waitForSelector(selectors.locationButton);
         await locationButton.click();

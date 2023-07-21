@@ -6,6 +6,7 @@ const dataSelectors = {
     ASIN: '//*[@id="detailBullets_feature_div"]/ul/li[5]/span/span[2]',
     BSR: '//*[@id="detailBulletsWrapper_feature_div"]/ul[1]/li/span',
     Date: '//*[@id="detailBullets_feature_div"]/ul/li[3]/span/span[2]',
+    Title: '//*[@id="productTitle"]'
 };
 function delay(ms) {
     return new Promise(function(resolve) {
@@ -42,7 +43,12 @@ export const fetchData = async (url) => {
         const date = await el2.getProperty('innerText');
         const dateTxt = await date.jsonValue();
 
+        // scrape Titke
+        const [el3] = await page.$x(dataSelectors.Title);
+        const title = await el3.getProperty('innerText');
+        const titleTxt = await title.jsonValue();
+
         await page.close();
-        return { asinTxt, BSRTxt, dateTxt };
+        return { asinTxt, BSRTxt, dateTxt, titleTxt };
 };
 

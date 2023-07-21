@@ -12,6 +12,10 @@ const getData = async () => {
         browserWSEndpoint: Endpointurl,
     });
     const page = await browser.newPage();
+    await page.setViewport({
+        width: 1920,
+        height: 1080,
+    });
     await page.goto(pageURL);
     for (let i = 0; i < productPages.length; i ++) {
         const dataPage = await fetchData(productPages[i]);
@@ -20,9 +24,10 @@ const getData = async () => {
             if (dataPage.BSRTxt) {
                 document.querySelector(`#data${i+1}_0`).innerHTML = `${i+1}`;
                 document.querySelector(`#data${i+1}_1`).innerHTML = dataPage.asinTxt;
+                document.querySelector(`#data${i+1}_1`).href = `http://amazon.com/dp/${dataPage.asinTxt}`;
                 document.querySelector(`#data${i+1}_2`).innerHTML = dataPage.BSRTxt;
                 document.querySelector(`#data${i+1}_3`).innerHTML = dataPage.dateTxt;
-                document.querySelector(`#data${i+1}_4`).innerHTML = `http://amazon.com/dp/${dataPage.asinTxt}`;
+                document.querySelector(`#data${i+1}_4`).innerHTML = dataPage.titleTxt;
             }
         }, i, dataPage);
     };
